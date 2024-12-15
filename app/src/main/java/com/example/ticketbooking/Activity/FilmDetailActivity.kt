@@ -1,9 +1,11 @@
 package com.example.ticketbooking.Activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -14,8 +16,9 @@ import com.example.ticketbooking.adapter.CategoryEachFilmAdapter
 import com.example.ticketbooking.Models.Film
 import com.example.ticketbookingapp.R
 import com.example.ticketbookingapp.databinding.ActivityFilmDetailBinding
-import com.eightbitlab.blurview.BlurView
-import com.eightbitlab.blurview.RenderScriptBlur
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.view.View
 
 class FilmDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFilmDetailBinding
@@ -42,7 +45,8 @@ class FilmDetailActivity : AppCompatActivity() {
         }
 
         if (item == null) {
-            finish() // Exit the activity if no data is passed
+            Toast.makeText(this, "Film details not available", Toast.LENGTH_SHORT).show()
+            finish()
             return
         }
 
@@ -62,28 +66,36 @@ class FilmDetailActivity : AppCompatActivity() {
         binding.backBtn.setOnClickListener {
             finish()
         }
-        binding.buyTicketBtn.setOnClickListener{
-            val intent = Intent(this,SeatListActivity::class.java)
-            intent.putExtra("film",item)
+        binding.buyTicketBtn.setOnClickListener {
+            val intent = Intent(this, SeatListActivity::class.java)
+            intent.putExtra("film", item)
             startActivity(intent)
         }
 
-        val radius = 10f
+        // Apply blur effect based on device version
         val decorView = window.decorView
         val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
         val windowsBackground = decorView.background
 
-        var blurRadius = binding.blurView.setupWith(rootView, RenderScriptBlur(this))
-            .setFrameClearDrawable(windowsBackground)
-            .setBlurRadius(radius)
-        binding.blurView.clipToOutline = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Use RenderEffect for Android 12+ devices
+            val blurEffect = RenderEffect.createBlurEffect(10f, 10f, Shader.TileMode.CLAMP)
+            binding.blurContainer.setRenderEffect(blurEffect)
+        } else {
+            // Fallback for older devices
+            binding.blurContainer.background = windowsBackground
+        }
 
+        binding.blurContainer.clipToOutline = true
+
+        // Genre List Setup
         item.Genre?.let { genres ->
             binding.genreView.adapter = CategoryEachFilmAdapter(genres)
             binding.genreView.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         }
 
+        // Cast List Setup
         item.Casts?.let { casts ->
             binding.castListView.adapter = CategoryEachFilmAdapter(casts.map { it.toString() })
             binding.castListView.layoutManager =

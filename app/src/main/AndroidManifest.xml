@@ -12,50 +12,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TicketBooking"
         tools:targetApi="31">
+
+        <!-- Declaring the activities without duplicate main activity filters -->
         <activity
             android:name="com.example.ticketbooking.Activity.SeatListActivity"
             android:exported="false" />
+
         <activity
             android:name="com.example.ticketbooking.Activity.FilmDetailActivity"
             android:exported="false" />
+
+        <!-- The correct main activity -->
+        <activity
+            android:name="com.example.ticketbooking.Activity.IntroActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- No need for additional MAIN and LAUNCHER filters for MainActivity -->
         <activity
             android:name="com.example.ticketbooking.Activity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.example.ticketbooking.MainActivity2"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".IntroActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.TicketBooking">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

@@ -84,5 +84,5 @@ dependencies {
     implementation(libs.chip.navigation.bar)
 
     // BlurView Library
-    implementation("com.eightbitlab:blurview:1.6.6") // Updated BlurView version
+     // Updated BlurView version
 }
