@@ -3,8 +3,6 @@ package com.example.ticketbooking.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,9 +14,6 @@ import com.example.ticketbooking.adapter.CategoryEachFilmAdapter
 import com.example.ticketbooking.Models.Film
 import com.example.ticketbookingapp.R
 import com.example.ticketbookingapp.databinding.ActivityFilmDetailBinding
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.view.View
 
 class FilmDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFilmDetailBinding
@@ -28,10 +23,6 @@ class FilmDetailActivity : AppCompatActivity() {
         binding = ActivityFilmDetailBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
 
         setVariable()
     }
@@ -71,22 +62,6 @@ class FilmDetailActivity : AppCompatActivity() {
             intent.putExtra("film", item)
             startActivity(intent)
         }
-
-        // Apply blur effect based on device version
-        val decorView = window.decorView
-        val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
-        val windowsBackground = decorView.background
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // Use RenderEffect for Android 12+ devices
-            val blurEffect = RenderEffect.createBlurEffect(10f, 10f, Shader.TileMode.CLAMP)
-            binding.blurContainer.setRenderEffect(blurEffect)
-        } else {
-            // Fallback for older devices
-            binding.blurContainer.background = windowsBackground
-        }
-
-        binding.blurContainer.clipToOutline = true
 
         // Genre List Setup
         item.Genre?.let { genres ->
